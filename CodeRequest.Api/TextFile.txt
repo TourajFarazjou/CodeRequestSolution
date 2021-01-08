@@ -1,5 +1,12 @@
 ﻿
 
+
+
+git remote add origin https://github.com/TourajFarazjou/CodeRequestSolution.git
+
+
+git push https://github.com/TourajFarazjou/CodeRequestSolution.git
+
 -------------------------------------------------------------------
 
    CREATE TRIGGER tr_CalculatorJob ON CalculatorJob
