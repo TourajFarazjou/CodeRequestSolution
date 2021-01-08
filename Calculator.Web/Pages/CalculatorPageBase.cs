@@ -25,10 +25,6 @@ namespace Calculator.Web.Pages
          CalculationStatus = new CalculationStatusViewModel();
       }
 
-      //protected override Task OnInitializedAsync()
-      //{
-      //}
-
       protected async Task HandleValidSubmit()
       {
          try
@@ -43,16 +39,9 @@ namespace Calculator.Web.Pages
                do
                {
                   statusObject = CalculatorService.GetCalculationStatus(jobId).Result;
-
                   CalculationStatus.Status = statusObject.Status.ToString();
                   CalculationStatus.Progress = $"{ statusObject.Progress } %";
-                  
                   InvokeAsync(() => StateHasChanged());
-
-                  // sleep (1000); ?
-
-                  // OR use timer !!?
-
                } while (statusObject.Status == Models.CalculationStatus.Running);
 
                if (statusObject.Status == Models.CalculationStatus.Completed)
@@ -64,7 +53,6 @@ namespace Calculator.Web.Pages
          finally
          {
             IsCalculating = false;
-
             StateHasChanged();
          }
       }
