@@ -12,6 +12,8 @@ namespace Calculator.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    FirstValue = table.Column<int>(nullable: false),
+                    SecondValue = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Progress = table.Column<int>(nullable: false),
                     Outcome = table.Column<int>(nullable: false)

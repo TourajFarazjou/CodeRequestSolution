@@ -1,24 +1,5 @@
 ﻿@page "/"
 @inherits CalculatorPageBase
-@*<h3>Calculator</h3>*@
-
-@*List of calculations*@
-@*---------------------------------------------------------------------------*@
-@*@if (CalculationJobs == null)
-   {
-      <div class="spinner"></div>
-   }
-   else
-   {
-
-      @foreach (var calculationJob in CalculationJobs)
-      {
-         <p> @calculationJob.Id </p>
-      }
-   }
-   <hr />*@
-@*---------------------------------------------------------------------------*@
-
 
 <div class="card col-sm-10">
    <EditForm Model="@CalculationRequest" OnValidSubmit="HandleValidSubmit">
@@ -82,7 +63,3 @@
    </div>
 </div>
 
-
-@*<div class="alert alert-danger" role="alert">
-
-   </div>*@

@@ -1,12 +1,10 @@
-﻿using Calculator.Domain;
+﻿using AutoMapper;
+using Calculator.Domain;
 using Calculator.Models;
 using Calculator.Services;
-using Hangfire;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Calculator.Controllers
@@ -16,17 +14,17 @@ namespace Calculator.Controllers
    public class CalculatorController : ControllerBase
    {
       private readonly ICalculatorService _calculatorService;
+      private readonly IMapper _mapper;
 
-      public CalculatorController(ICalculatorService calculatorService)
+      public CalculatorController(ICalculatorService calculatorService, IMapper mapper)
       {
          _calculatorService = calculatorService;
+         _mapper = mapper;
       }
-
 
       [HttpGet("")]
       public async Task<IActionResult> GetCalculations()
       {
-
          var calculations = await _calculatorService.GetCalculations();
          List<CalculationResponse> response = new List<CalculationResponse>();
          foreach (var item in calculations)
@@ -34,9 +32,7 @@ namespace Calculator.Controllers
             response.Add(new CalculationResponse { Id = item.Id });
          }
          return Ok(response);
-
       }
-
 
       [HttpPost]
       public async Task<IActionResult> StartCalculation(CalculationRequest request)
@@ -45,16 +41,8 @@ namespace Calculator.Controllers
          {
             return BadRequest(request);
          }
-
-         // map to domain object
-         var newJob = new CalculatorJob
-         {
-            FirstValue = request.FirstValue,
-            SecondValue = request.SecondValue,
-         };
-
-         var guid = await _calculatorService.StartCalculation(newJob);
-
+         var newCalculatorJob = _mapper.Map<CalculatorJob>(request);
+         var guid = await _calculatorService.StartCalculation(newCalculatorJob);
          return Ok(guid);
       }
 
@@ -66,16 +54,7 @@ namespace Calculator.Controllers
          {
             return NotFound();
          }
-
-         // map to status ...
-         var statusObject = new CalculationResponse
-         {
-            Id = calculatorJob.Id,
-            Status = calculatorJob.Status, //.ToString(),
-            Progress = calculatorJob.Progress,
-            Outcome = calculatorJob.Outcome
-         };
-
+         var statusObject = _mapper.Map<CalculationResponse>(calculatorJob);
          return Ok(statusObject);
       }
    }

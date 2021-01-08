@@ -1,3 +1,5 @@
+using AutoMapper;
+using Calculator.Api.Domain.MappingProfiles;
 using Calculator.Persistence;
 using Calculator.Services;
 using Hangfire;
@@ -24,6 +26,8 @@ namespace Calculator.Api
       public void ConfigureServices(IServiceCollection services)
       {
          services.AddControllers();
+
+         services.AddAutoMapper(typeof(CalculatorJobProfile));
 
          services.AddTransient<ICalculatorService, CalculatorService>();
 

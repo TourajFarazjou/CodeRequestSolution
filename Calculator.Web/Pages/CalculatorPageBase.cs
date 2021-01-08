@@ -14,38 +14,10 @@ namespace Calculator.Web.Pages
 
       public IEnumerable<CalculationResponse> CalculationJobs { get; set; }
       public CalculationRequest CalculationRequest { get; set; }
-
-
       public CalculationStatusViewModel CalculationStatus { get; set; }
 
-
-      protected bool IsCalculating { get; set; }
+      public bool IsCalculating { get; set; }
       public string IsCalculatingCssClass => IsCalculating ? null : "collapse";
-
-
-      //protected bool DoneCalculating { get; set; }
-      //public string DoneCalculatingCssClass => IsCalculating ? null : "collapse";
-
-
-      //private bool isCalculating;
-      //public bool IsCalculating 
-      //{
-      //   get { return isCalculating; }
-      //   set 
-      //   {
-      //      IsCalculatingCssClass
-      //   } 
-      //}
-
-      //protected string Hidden { get; set; } = "visibility: hidden";
-
-      //protected string  ProgressIndicator CssClass => collapseProgressIndicator ? "collapse" : null;
-
-      //private void ToggleProgressIndicator(bool hide)
-      //{
-      //   collapseProgressIndicator = !collapseProgressIndicator;
-      //}
-
 
       public CalculatorPageBase()
       {
@@ -53,15 +25,9 @@ namespace Calculator.Web.Pages
          CalculationStatus = new CalculationStatusViewModel();
       }
 
-      protected override async Task OnInitializedAsync()
-      {
-         await LoadCalculations();
-      }
-
-      private async Task LoadCalculations()
-      {
-         CalculationJobs = await CalculatorService.GetCalculations();
-      }
+      //protected override Task OnInitializedAsync()
+      //{
+      //}
 
       protected async Task HandleValidSubmit()
       {
@@ -89,10 +55,10 @@ namespace Calculator.Web.Pages
 
                } while (statusObject.Status == Models.CalculationStatus.Running);
 
-               //if (statusObject.Status == Models.CalculationStatus.Completed)
-               //{
-               //   //Hidden = "visibility: visible";
-               //}
+               if (statusObject.Status == Models.CalculationStatus.Completed)
+               {
+                  CalculationStatus.Outcome = statusObject.Outcome;
+               }
             });
          }
          finally
@@ -102,30 +68,5 @@ namespace Calculator.Web.Pages
             StateHasChanged();
          }
       }
-
-
-
-      //protected string FormIsInvalid { get; set; } = "disabled";
-
-
-      //[Parameter]
-      //public EventCallback<CalculationRequest> CalculationRequestChanged { get; set; }
-
-      //private InputWatcher inputWatcher;
-      //private bool isInvalid = false;
-
-
-      //public InputWatcher InputWatcher { get; set; }
-
-      //private InputWatcher inputWatcher;
-
-      //private bool isInvalid = false;
-      //private void FieldChanged(string fieldName)
-      //{
-      //   //Console.WriteLine($"*** {Customer.Name}");
-      //   isInvalid = !inputWatcher.Validate();
-      //   CustomerChanged.InvokeAsync(Customer);
-      //}
-
    }
 }

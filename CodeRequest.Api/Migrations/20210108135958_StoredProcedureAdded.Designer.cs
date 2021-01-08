@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Calculator.Api.Migrations
 {
     [DbContext(typeof(CalculatorDBContext))]
-    [Migration("20210106232547_StoredProcedureAdded")]
+    [Migration("20210108135958_StoredProcedureAdded")]
     partial class StoredProcedureAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,10 +27,16 @@ namespace Calculator.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("FirstValue")
+                        .HasColumnType("int");
+
                     b.Property<int>("Outcome")
                         .HasColumnType("int");
 
                     b.Property<int>("Progress")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SecondValue")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")

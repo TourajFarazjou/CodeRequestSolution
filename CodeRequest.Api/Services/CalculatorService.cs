@@ -29,9 +29,6 @@ namespace Calculator.Services
 
       public async Task<Guid> StartCalculation(CalculatorJob calculatorJob)
       {
-
-         Calculator.Tests
-
          _context.CalculatorJobs.Add(calculatorJob);
          await _context.SaveChangesAsync();
 
@@ -45,31 +42,12 @@ namespace Calculator.Services
          return await _context.CalculatorJobs.FirstOrDefaultAsync(e => e.Id == jobId);
       }
 
-
-      /// <summary>
-      /// https://www.youtube.com/watch?v=UAWDMYKy8PM
-      /// </summary>
       public void RunInBackground(Guid jobId)
       {
-         //Thread.Sleep(5000);
-         
-         //Console.WriteLine($"START Running {Thread.CurrentThread.Name}");
-
-         // https://www.youtube.com/watch?v=DpLQYVErKm8
-
          var result = _context.CalculatorJobs
                          .FromSqlRaw<CalculatorJob>($"spStartCalculation '{jobId}'")
                          .ToList()
                          .FirstOrDefault();
-
-
-         //Console.WriteLine($"{jobId} updated ******************* ");
-
-         ////Thread.Sleep(5000);
-
-         //Console.WriteLine($"END Running {Thread.CurrentThread.Name}");
-
-
       }
    }
 }

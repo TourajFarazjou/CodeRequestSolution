@@ -15,16 +15,32 @@ namespace Calculator.Api.Migrations
                 @JobId UNIQUEIDENTIFIER
             AS
             BEGIN
-                
-				UPDATE CalculatorJob
-				SET Progress = 35
-				WHERE id = @JobId;
-              
+
+				-- New = 0,
+				-- Running = 1,
+				-- Failed = 2,
+				-- Completed = 3
+
+				UPDATE CalculatorJob SET Progress = 0, Status = 1 WHERE id = @JobId; -- Running
+                DECLARE @cnt INT = 5;
+				WHILE @cnt < 100
+				BEGIN
+				   
+				   UPDATE CalculatorJob SET Progress = @cnt WHERE id = @JobId;
+				   WAITFOR DELAY '00:00:01';
+				   SET @cnt = @cnt + 5;
+				END;
+
+				IF (@cnt >= 100)
+					UPDATE CalculatorJob SET Progress = 100, Status = 3, Outcome = 6281 WHERE id = @JobId; -- Completed
+				ELSE
+					UPDATE CalculatorJob SET Status = 2 WHERE id = @JobId; -- Failed
+
+  				select * from CalculatorJob WHERE id = @JobId;
 
             END";
 
          migrationBuilder.Sql(sql);
-
       }
 
       protected override void Down(MigrationBuilder migrationBuilder)
