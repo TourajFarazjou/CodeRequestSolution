@@ -1,0 +1,84 @@
+﻿
+
+-------------------------------------------------------------------
+
+   CREATE TRIGGER tr_CalculatorJob ON CalculatorJob
+    AFTER INSERT
+    AS
+    BEGIN
+      
+	  declare @JobId UNIQUEIDENTIFIER;
+
+	  SELECT @JobId = inserted.id  FROM inserted;
+
+	  exec [dbo].[spStartCalculation] @JobId;
+
+	  --UPDATE CalculatorJob
+   --   SET Progress = 35
+   --   FROM inserted
+   --   WHERE CalculatorJob.id = inserted.id;
+
+    END
+   GO
+
+   --------------------------------------------------------
+
+       public partial class StoredProcedureAdded : Migration
+    {
+      protected override void Up(MigrationBuilder migrationBuilder)
+      {
+         var sql = @"
+            IF OBJECT_ID('spStartCalculation', 'P') IS NOT NULL
+            DROP PROC spStartCalculation
+            GO
+ 
+            CREATE PROCEDURE [dbo].[spStartCalculation]
+                @JobId UNIQUEIDENTIFIER
+            AS
+            BEGIN
+                
+
+				-- New = 0,
+				-- Running = 1,
+				-- Failed = 2,
+				-- Completed = 3
+
+				UPDATE CalculatorJob SET Progress = 0, Status = 1 WHERE id = @JobId; -- Running
+                DECLARE @cnt INT = 5;
+				WHILE @cnt < 100
+				BEGIN
+				   
+				   UPDATE CalculatorJob SET Progress = @cnt WHERE id = @JobId;
+
+				   --PRINT @cnt
+
+				   WAITFOR DELAY '00:00:01';
+
+				   SET @cnt = @cnt + 5;
+
+				END;
+
+				--PRINT @cnt
+
+				IF (@cnt >= 100)
+					UPDATE CalculatorJob SET Progress = 100, Status = 3, Outcome = 6281 WHERE id = @JobId; -- Completed
+				ELSE
+					UPDATE CalculatorJob SET Status = 2 WHERE id = @JobId; -- Failed
+
+
+  				select * from CalculatorJob WHERE id = @JobId;
+
+
+            END";
+
+         migrationBuilder.Sql(sql);
+
+      }
+
+      protected override void Down(MigrationBuilder migrationBuilder)
+      {
+         migrationBuilder.Sql(@"DROP PROC spStartCalculation");
+      }
+   }
+
+
