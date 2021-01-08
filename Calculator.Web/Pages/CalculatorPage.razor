@@ -6,7 +6,6 @@
       <DataAnnotationsValidator />
       <h4>Calculation request form</h4>
       <hr />
-      @*<ValidationSummary />*@
       <div class="form-group row">
          <label for="firstValue" class="col-sm-6 col-form-label">
             First Value
@@ -25,19 +24,12 @@
             <ValidationMessage For="@(() => CalculationRequest.SecondValue)" />
          </div>
       </div>
-
       <hr />
-
-      @*"@(IsCalculating || (!context.Validate() && context.IsModified()) )"*@
-
       <button disabled="@(IsCalculating)" class="btn btn-primary" type="submit">Start Calculation</button>
-
    </EditForm>
 </div>
 
 <hr />
-@*@bind-style="@Hidden" @bind-style:event="onchange"*@
-@*Calculation Outcome*@
 <div class="card col-sm-10 " >
    <div class="card-header">Calculation Outcome</div>
    <div class="card-body">@CalculationStatus.Outcome</div>
@@ -56,9 +48,6 @@
          <div class="col-sm-3">
             <div class="spinner-border" disabled="!@IsCalculating"></div>
          </div>
-         @*<div class="col-sm-3">
-               <button class="btn btn-primary" type="button">Cancel</button>
-            </div>*@
       </div>
    </div>
 </div>
