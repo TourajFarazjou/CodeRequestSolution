@@ -4,25 +4,39 @@ using System.Threading.Tasks;
 using Calculator.Models;
 using Calculator.Services;
 using Calculator.Web.ViewModels;
+using Calculator.Web.Components;
 
 namespace Calculator.Web.Pages
 {
-   public class CalculatorPageBase : ComponentBase
+	public class CalculatorPageBase : ComponentBase
    {
       [Inject]
-      public ICalculatorService CalculatorService { get; set; }
+      private ICalculatorService CalculatorService { get; set; }
 
-      public IEnumerable<CalculationResponse> CalculationJobs { get; set; }
-      public CalculationRequest CalculationRequest { get; set; }
-      public CalculationStatusViewModel CalculationStatus { get; set; }
+      protected IEnumerable<CalculationResponse> CalculationJobs { get; set; }
+      protected CalculationRequest CalculationRequest { get; set; }
+      protected CalculationStatusViewModel CalculationStatus { get; set; }
 
-      public bool IsCalculating { get; set; }
-      public string IsCalculatingCssClass => IsCalculating ? null : "collapse";
+      protected bool IsCalculating { get; set; }
+      protected string IsCalculatingCssClass => IsCalculating ? null : "collapse";
+
+      protected InputWatcher InputWatcher { get; set; }
+      protected bool ContextValidated { get; set; }
+
+
+		[Parameter]
+		public EventCallback<CalculationRequest> CalculationRequestChanged { get; set; }
 
       public CalculatorPageBase()
       {
          CalculationRequest = new CalculationRequest();
          CalculationStatus = new CalculationStatusViewModel();
+      }
+
+      protected void FieldChanged(string fieldName)
+      {
+         ContextValidated = InputWatcher.Validate();
+         CalculationRequestChanged.InvokeAsync(CalculationRequest);
       }
 
       protected async Task HandleValidSubmit()

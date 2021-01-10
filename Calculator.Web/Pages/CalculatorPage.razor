@@ -1,54 +1,63 @@
 ﻿@page "/"
+@using Calculator.Web.Components
 @inherits CalculatorPageBase
 
 <div class="card col-sm-10">
-   <EditForm Model="@CalculationRequest" OnValidSubmit="HandleValidSubmit">
-      <DataAnnotationsValidator />
-      <h4>Calculation request form</h4>
-      <hr />
-      <div class="form-group row">
-         <label for="firstValue" class="col-sm-6 col-form-label">
-            First Value
-         </label>
-         <div class="col-sm-6">
-            <InputNumber id="firstValue" class="form-control" placeholder="First value" @bind-Value="CalculationRequest.FirstValue" />
-            <ValidationMessage For="@(() => CalculationRequest.FirstValue)" />
-         </div>
-      </div>
-      <div class="form-group row">
-         <label for="secondValue" class="col-sm-6 col-form-label">
-            Second Value
-         </label>
-         <div class="col-sm-6">
-            <InputNumber id="secondValue" class="form-control" placeholder="Second value" @bind-Value="CalculationRequest.SecondValue" />
-            <ValidationMessage For="@(() => CalculationRequest.SecondValue)" />
-         </div>
-      </div>
-      <hr />
-      <button disabled="@(IsCalculating)" class="btn btn-primary" type="submit">Start Calculation</button>
-   </EditForm>
+	<EditForm Model="@CalculationRequest" OnValidSubmit="HandleValidSubmit">
+		<DataAnnotationsValidator />
+
+		<InputWatcher @ref="@InputWatcher" FieldChanged="@FieldChanged" />
+
+		<h4>Calculation request form</h4>
+		<hr />
+		<div class="form-group row">
+			<label for="firstValue" class="col-sm-6 col-form-label">
+				First Value
+			</label>
+			<div class="col-sm-6">
+				<InputNumber id="firstValue" class="form-control" placeholder="First value" @bind-Value="CalculationRequest.FirstValue" />
+				<ValidationMessage For="@(() => CalculationRequest.FirstValue)" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="secondValue" class="col-sm-6 col-form-label">
+				Second Value
+			</label>
+			<div class="col-sm-6">
+				<InputNumber id="secondValue" class="form-control" placeholder="Second value" @bind-Value="CalculationRequest.SecondValue" />
+				<ValidationMessage For="@(() => CalculationRequest.SecondValue)" />
+			</div>
+		</div>
+		<hr />
+		<button disabled="@(!ContextValidated || IsCalculating)" class="btn btn-primary" type="submit">Start Calculation</button>
+	</EditForm>
 </div>
 
 <hr />
-<div class="card col-sm-10 " >
-   <div class="card-header">Calculation Outcome</div>
-   <div class="card-body">@CalculationStatus.Outcome</div>
+@*Calculation Outcome*@
+<div class="card col-sm-10 ">
+	<div class="card-header">Calculation Outcome</div>
+	<div class="card-body">
+
+		@CalculationStatus.Outcome
+
+	</div>
 </div>
 
 @*Progress Indicator*@
-<div class="card col-sm-10 bg-light text-dark @IsCalculatingCssClass" >
-   <div class="card-body">
-      <div class="row">
-         <div class="col-lg-4">
-            @CalculationStatus.Status
-         </div>
-         <div class="col-lg-2">
-            @CalculationStatus.Progress
-         </div>
-         <div class="col-sm-3">
-            <div class="spinner-border" disabled="!@IsCalculating"></div>
-         </div>
-      </div>
-   </div>
+<div class="card col-sm-10 bg-light text-dark @IsCalculatingCssClass">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-lg-4">
+				@CalculationStatus.Status
+			</div>
+			<div class="col-lg-2">
+				@CalculationStatus.Progress
+			</div>
+			<div class="col-sm-3">
+				<div class="spinner-border" disabled="!@IsCalculating"></div>
+			</div>
+		</div>
+	</div>
 </div>
 

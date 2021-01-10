@@ -6,7 +6,7 @@
 
       public string Progress { get; set; }
 
-      public int Outcome { get; set; }
+      public int? Outcome { get; set; }
 
    }
 }
