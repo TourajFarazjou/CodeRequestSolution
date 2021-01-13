@@ -26,11 +26,7 @@ namespace Calculator.Controllers
       public async Task<IActionResult> GetCalculations()
       {
          var calculations = await _calculatorService.GetCalculations();
-         List<CalculationResponse> response = new List<CalculationResponse>();
-         foreach (var item in calculations)
-         {
-            response.Add(new CalculationResponse { Id = item.Id });
-         }
+         var response = _mapper.Map<IEnumerable<CalculationResponse>>(calculations);
          return Ok(response);
       }
 
@@ -46,10 +42,10 @@ namespace Calculator.Controllers
          return Ok(guid);
       }
 
-      [HttpGet("{guid}")]
-      public async Task<IActionResult> GetStatus(Guid guid)
+      [HttpGet("{id:guid}")]
+      public async Task<IActionResult> GetStatus(Guid id)
       {
-         var calculatorJob = await _calculatorService.GetCalculation(guid);
+         var calculatorJob = await _calculatorService.GetCalculation(id);
          if (calculatorJob == null)
          {
             return NotFound();

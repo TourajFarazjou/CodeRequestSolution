@@ -9,18 +9,11 @@ namespace Calculator.Services
 {
    public interface ICalculatorService
    {
-
       Task<IEnumerable<CalculatorJob>> GetCalculations();
-
-
-
-
 
       Task<Guid> StartCalculation(CalculatorJob calculatorJob);
 
       Task<CalculatorJob> GetCalculation(Guid jobId);
-
-
    }
 }
 
